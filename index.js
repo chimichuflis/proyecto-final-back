@@ -2,7 +2,7 @@
 
 const express = require("express");
 
-const users = require("./routes/usersRoutes");
+const user = require("./routes/userRoutes");
 const artists = require("./routes/artistRoutes")
 const activities = require("./routes/activityRoutes")
 const moods = require("./routes/moodRoutes")
@@ -20,9 +20,10 @@ const port = 8009;
 const app = express();
 
 app.use(morgan("dev"));
+app.use(express.json());
 app.use(cors());
 
-app.use("/api", users);
+app.use("/api", user);
 app.use("/api", artists);
 app.use("/api", activities);
 app.use("/api", moods);
@@ -32,5 +33,5 @@ app.use("/api", songs);
 app.use("/api", playlists);
 
 app.listen(port, () => {
-  console.log("Servidor levantado y escuchando en el puerto" + port);
+  console.log("Servidor levantado y escuchando en el puerto " + port);
 });
