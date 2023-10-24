@@ -10,5 +10,10 @@ const getSongs = async (req, res) => {
         res.status(500).json({ message: "Error al obtener las tareas" });
     }
 }
+const getTest = async (req,res)=>{
+  console.log("eh")
+  const songs = await knex("songs").select("*")
+  res.json(songs);
+}
 
-module.exports = { getSongs }
+module.exports = { getSongs, getTest }

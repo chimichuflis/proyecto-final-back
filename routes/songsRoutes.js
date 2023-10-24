@@ -3,7 +3,12 @@ const router = express.Router();
 
 const {
     getSongs,
+    getTest
 } = require("../controllers/songs");
+
+
+router.get("/test", getTest);
+
 
 router.get(
     "/songs",
