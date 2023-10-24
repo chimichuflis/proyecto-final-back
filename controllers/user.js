@@ -1,56 +1,69 @@
 const knex = require("../config/knexfile");
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
-/*
-const userList = async (req, res) => {
-  try {
-    const result = await knex("users");
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-*/
+
+
 const userRegister = async (req,res)=>{
   try{
-    if(!req.body){
-      return res.status(400).json({error:"post is empty"});
-    }
-    const {email, profile, password} = req.body;
-    // username
-    if(!profile){
-      return res.status(400).json({error:"empty username"});
-    }
 
-    // password
-
-    if(!password){
-      return res.status(400).json({error: "empty password"});
+    const emailExists = await knex("users")
+      .where("email", req.body.email)
+      .first();
+    
+    if(emailExists){
+      res.status(409).json("email already in use");
+    }else{
+      const salt = await bcrypt.genSalt(10);
+      const passwordEncrypt = await bcrypt.hash(req.body.password,salt);
+      await knex("users")
+        .insert(
+          {
+            email: req.body.email,
+            password: passwordEncrypt,
+            user_name: req.body.profile,
+            user_title: req.body.profile
+          }
+        );
+      res.json("ok");
     }
-    if(password.length<8){
-      return res.status(400).json({error:"password needs to be at least 8 characters"});
-    }
-    const salt = await bcrypt.genSalt(10);
-    const passwordEncrypt = await bcrypt.hash(password,salt);
-
-    // email
-    if(!email){
-      return res.status(400).json({error:"empty email"});
-    }
-    const emailExists = await knex(users)
-      .where("email", email)
-      .first()
-      
-
-    res.json(emailExists);
   }
   catch(err){
-    res.json(err);
-    console.log(err)
+    res.status(400).json(err);
   }
 }
-const userLogin = (req,res)=>{
-  res.json("empty login function");
+
+
+const userLogin = async (req,res)=>{
+  try{
+    const emailExists = await knex("users")
+      .where("email", req.body.email)
+      .first()
+
+    if(!emailExists){
+      res.status(409).json({error: "invalid email or password"});
+    }else{
+      const validatePassword = await bcrypt.compare(
+        req.body.password, emailExists.password
+      );
+      if(!validatePassword){
+        res.status(409).json({error: "invalid email or password"});
+      }else{
+        const token = jsonwebtoken.sign(
+          {
+            profile: emailExists.user_name,
+            title: emailExists.user_title,
+            email: emailExists.email
+          },"audn"
+        )
+        res.json({message:"login successful", token: token});
+      }
+    }
+  }
+  catch(err){
+    res.status(400).json(err);
+  }
+
+
 }
 
 
