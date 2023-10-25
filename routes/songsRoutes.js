@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const tokenValidator = require("../middleweares/validators/tokenValidator");
+
 const {
     getSongs,
     getTest
@@ -12,6 +14,7 @@ router.get("/test", getTest);
 
 router.get(
     "/songs",
+    tokenValidator,
     getSongs
 );
 

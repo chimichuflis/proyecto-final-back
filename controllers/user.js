@@ -2,7 +2,6 @@ const knex = require("../config/knexfile");
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
 
-
 const userRegister = async (req,res)=>{
   try{
 
@@ -50,20 +49,16 @@ const userLogin = async (req,res)=>{
       }else{
         const token = jsonwebtoken.sign(
           {
-            profile: emailExists.user_name,
-            title: emailExists.user_title,
-            email: emailExists.email
-          },"audn"
-        )
-        res.json({message:"login successful", token: token});
+            email: req.body.email
+          },"audn",{ expiresIn: '600000s' }
+        );
+        res.json({message:"token generated successfuly", token: token});
       }
     }
   }
   catch(err){
     res.status(400).json(err);
   }
-
-
 }
 
 
