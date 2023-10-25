@@ -2,6 +2,24 @@ const knex = require("../config/knexfile");
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
 
+
+const validEmail = async (req,res)=>{
+  try{
+    const emailExists = await knex("users")
+      .where("email", req.body.email)
+      .first()
+
+    if(!emailExists){
+      return res.json({validity: true});
+    }
+    return res.json({validity:false});
+  }
+  catch(err){
+    res.status(400).json(err);
+  }
+}
+
+
 const userRegister = async (req,res)=>{
   try{
 
@@ -35,11 +53,12 @@ const userRegister = async (req,res)=>{
 const userLogin = async (req,res)=>{
   try{
     const emailExists = await knex("users")
-      .where("email", req.body.email)
+      .where("email", req.body.profile)
+      .orWhere("user_name", req.body.profile)
       .first()
 
     if(!emailExists){
-      res.status(409).json({error: "invalid email or password"});
+      res.status(409).json({error: "invalid user or password"});
     }else{
       const validatePassword = await bcrypt.compare(
         req.body.password, emailExists.password
@@ -49,7 +68,7 @@ const userLogin = async (req,res)=>{
       }else{
         const token = jsonwebtoken.sign(
           {
-            email: req.body.email
+            email: emailExists.email
           },"audn",{ expiresIn: '600000s' }
         );
         res.json({message:"token generated successfuly", token: token});
@@ -62,4 +81,4 @@ const userLogin = async (req,res)=>{
 }
 
 
-module.exports = { userRegister, userLogin };
+module.exports = { userRegister, userLogin, validEmail };

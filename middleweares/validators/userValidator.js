@@ -1,4 +1,14 @@
 const {check,param} = require("express-validator");
+
+const emailValidation = [
+  check("email")
+    .not()
+    .isEmpty()
+    .withMessage("email cannot be empty")
+    .isEmail()
+    .withMessage("invalid email")
+];
+
 const registerValidation = [
   check("profile")
     .not()
@@ -21,13 +31,12 @@ const registerValidation = [
     .isLength({min:8})
     .withMessage("password must have at least 8 characters")
 ];
+
 const loginValidation = [
-  check("email")
+  check("profile")
     .not()
     .isEmpty()
-    .withMessage("email field is empty")
-    .isEmail()
-    .withMessage("invalid email")
+    .withMessage("email or user field is empty")
   ,
   check("password")
     .not()
@@ -37,4 +46,4 @@ const loginValidation = [
     .withMessage("password must have at least 8 characters")
 ]
 
-module.exports = {registerValidation, loginValidation};
+module.exports = {emailValidation, registerValidation, loginValidation};
