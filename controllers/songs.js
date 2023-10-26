@@ -13,5 +13,8 @@ const getTest = async (req,res)=>{
   const songs = await knex("songs").select("*")
   res.json(songs);
 }
+const findSongs = ()=>{
+  res.json({results: []});
+}
 
-module.exports = { getSongs, getTest }
+module.exports = { getSongs, getTest, findSongs }
