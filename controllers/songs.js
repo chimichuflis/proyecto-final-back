@@ -22,7 +22,7 @@ const findSongs = async(req,res)=>{
 
     const songs = await knex("songs")
       .join("artists", "artists.artist_id", "=", "songs.artist_id")
-      .select("song_id", "artist_name", "song_name", "album_name")
+      .select("song_id", "artist_name","artist_id", "song_name", "album_name")
       .where("song_name","like",query)
       .orWhere("artist_name","like", query)
       .orWhere("album_name", "like", query)
