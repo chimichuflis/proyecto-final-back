@@ -19,7 +19,7 @@ router.get(
     getSongs
 );
 
-router.get(
+router.post(
   "/search",
   //tokenValidator,
   findSongs
