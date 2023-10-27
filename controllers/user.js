@@ -37,8 +37,8 @@ const userRegister = async (req,res)=>{
           {
             email: req.body.email,
             password: passwordEncrypt,
-            user_name: req.body.user_name,
-            user_title: req.body.user_name
+            user_name: req.body.profile,
+            user_title: req.body.profile
           }
         );
       res.json({message:"user created succesfuly"});
