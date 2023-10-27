@@ -9,10 +9,6 @@ const getSongs = async (req, res) => {
         res.status(500).json({ message: error });
     }
 }
-const getTest = async (req,res)=>{
-  const songs = await knex("songs").select("*")
-  res.json(songs);
-}
 const findSongs = async(req,res)=>{
   if(!req.body.value){
     return res.status(401).json("value field is required");
@@ -22,7 +18,7 @@ const findSongs = async(req,res)=>{
 
     const songs = await knex("songs")
       .join("artists", "artists.artist_id", "=", "songs.artist_id")
-      .select("song_id", "artist_name","artist_id", "song_name", "album_name")
+      .select("song_id", "artist_name","songs.artist_id", "song_name", "album_name")
       .where("song_name","like",query)
       .orWhere("artist_name","like", query)
       .orWhere("album_name", "like", query)
@@ -45,4 +41,4 @@ const findSongs = async(req,res)=>{
   }
 }
 
-module.exports = { getSongs, getTest, findSongs }
+module.exports = { getSongs, findSongs }
