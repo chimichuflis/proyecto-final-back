@@ -41,7 +41,7 @@ const userRegister = async (req,res)=>{
             user_title: req.body.profile
           }
         );
-      res.json("ok");
+      res.json({message:"user created succesfuly"});
     }
   }
   catch(err){
