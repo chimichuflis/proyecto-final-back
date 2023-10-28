@@ -12,7 +12,7 @@ const validEmail = async (req,res)=>{
     if(!emailExists){
       return res.json({validity: true});
     }
-    return res.json({validity:false});
+    return res.json({validity:false, msg: "email already in use"});
   }
   catch(err){
     res.status(400).json(err);
