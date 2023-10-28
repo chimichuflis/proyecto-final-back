@@ -12,4 +12,4 @@ const tokenValidator = (req,res,next)=>{
   })
 }
 
-module.exports = tokenValidator;
+module.exports = {tokenValidator};

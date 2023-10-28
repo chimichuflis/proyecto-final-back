@@ -5,14 +5,11 @@ const jsonwebtoken = require("jsonwebtoken");
 
 const validEmail = async (req,res)=>{
   try{
-    const emailExists = await knex("users")
+    const user = await knex("users")
       .where("email", req.body.email)
       .first()
 
-    if(!emailExists){
-      return res.json({validity: true});
-    }
-    return res.json({validity:false, msg: "email already in use"});
+    return res.json({validity: !user, msg: user?"email ya existe":"email disponible"});
   }
   catch(err){
     res.status(400).json(err);
@@ -22,27 +19,25 @@ const validEmail = async (req,res)=>{
 
 const userRegister = async (req,res)=>{
   try{
-
-    const emailExists = await knex("users")
+    const user = await knex("users")
       .where("email", req.body.email)
       .first();
-    
-    if(emailExists){
-      res.status(409).json("email already in use");
-    }else{
-      const salt = await bcrypt.genSalt(10);
-      const passwordEncrypt = await bcrypt.hash(req.body.password,salt);
-      await knex("users")
-        .insert(
-          {
-            email: req.body.email,
-            password: passwordEncrypt,
-            user_name: req.body.profile,
-            user_title: req.body.profile
-          }
-        );
-      res.json({message:"user created succesfuly"});
+
+    if(user){
+      return res.status(409).json({pass: false, msg: "email already in use"});
     }
+    const salt = await bcrypt.genSalt(10);
+    const passwordEncrypt = await bcrypt.hash(req.body.password,salt);
+    await knex("users")
+      .insert(
+        {
+          email: req.body.email,
+          password: passwordEncrypt,
+          user_name: req.body.profile,
+          user_title: req.body.profile
+        }
+      );
+    return res.json({pass: true, msg:"user created succesfuly"});
   }
   catch(err){
     res.status(400).json(err);
@@ -52,28 +47,30 @@ const userRegister = async (req,res)=>{
 
 const userLogin = async (req,res)=>{
   try{
-    const emailExists = await knex("users")
+    const user = await knex("users")
       .where("email", req.body.profile)
       .orWhere("user_name", req.body.profile)
       .first()
 
-    if(!emailExists){
-      res.status(409).json({error: "invalid user or password"});
-    }else{
-      const validatePassword = await bcrypt.compare(
-        req.body.password, emailExists.password
-      );
-      if(!validatePassword){
-        res.status(409).json({error: "invalid email or password"});
-      }else{
-        const token = jsonwebtoken.sign(
-          {
-            email: emailExists.email
-          },"audn",{ expiresIn: '600000s' }
-        );
-        res.json({message:"token generated successfuly", token: token});
-      }
+    if(!user){
+      return res.status(409).json({pass: false, msg: "invalid user or password"});
     }
+    
+    const validatePassword = await bcrypt.compare(
+      req.body.password, user.password
+    );
+    if(!validatePassword){
+      return res.status(409).json({pass: false, msg: "invalid email or password"});
+    }
+
+    const token = jsonwebtoken.sign(
+      {
+        id: user.user_id,
+        name: user.user_name,
+        email: user.email
+      },"audn",{ expiresIn: '600000s' }
+    );
+    return res.json({pass: true, msg:"token generated successfuly", token: token});
   }
   catch(err){
     res.status(400).json(err);
