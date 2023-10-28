@@ -1,7 +1,7 @@
 const express = require("express");
 const { userLogin, userRegister, validEmail } = require("../controllers/user");
 const { runValidation, runEmailValidation } = require("../middleweares/validators");
-const { registerValidation, loginValidation , emailValidation} = require("../middleweares/validators/userValidator");
+const { registerValidation, loginValidation, emailValidation } = require("../middleweares/validators/userValidator");
 const router = express.Router();
 
 router.post(
