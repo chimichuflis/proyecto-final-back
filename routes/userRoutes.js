@@ -5,23 +5,23 @@ const { registerValidation, loginValidation, emailValidation } = require("../mid
 const router = express.Router();
 
 router.post(
-  "/user/register",
-  registerValidation,
-  runValidation,
+  "/user/register",         // req.body = { email: "", password: "", profile: "" }
+  registerValidation,       // returns { }
+  runValidation,            // { pass: boolean, msg: "" }
   userRegister
 );
 
-router.post(
-  "/user/login",
-  loginValidation,
-  runValidation,
+router.post(                // can login with username or password
+  "/user/login",            // req.body { profile:"", password:"" }
+  loginValidation,          // returns { }
+  runValidation,            // { pass: boolean, msg: "", token:"" }
   userLogin
 );
 
 router.post(
-  "/user/available",
-  emailValidation,
-  runEmailValidation,
-  validEmail
+  "/user/available",        // checks if email available
+  emailValidation,          // req.body = { email: "" }
+  runEmailValidation,       // returns { }
+  validEmail                // { validity: boolean, msg:"" }
 )
 module.exports = router;

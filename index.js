@@ -3,11 +3,7 @@
 const express = require("express");
 
 const user = require("./routes/userRoutes");
-const artists = require("./routes/artistRoutes")
-const activities = require("./routes/activityRoutes")
-const moods = require("./routes/moodRoutes")
-const weather = require("./routes/weatherRoutes")
-const genres = require("./routes/genreRoutes")
+const contextual = require("./routes/contextualRoutes")
 const songs = require("./routes/songsRoutes")
 const playlists = require("./routes/playlistRoutes")
 const morgan = require("morgan");
@@ -24,11 +20,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api", user);
-app.use("/api", artists);
-app.use("/api", activities);
-app.use("/api", moods);
-app.use("/api", weather);
-app.use("/api", genres);
+app.use("/api", contextual);
 app.use("/api", songs);
 app.use("/api", playlists);
 
