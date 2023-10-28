@@ -15,7 +15,7 @@ router.get(
 );
 
 router.post(            // req.body = { value: "" }
-  "song/search",        // returns [ {}, {} ]
+  "/song/search",        // returns [ {}, {} ]
   findSongs             // { song_id, artist_name, songs.artist_id, song_name, album_name }
 );
 

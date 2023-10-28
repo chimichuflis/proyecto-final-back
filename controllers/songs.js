@@ -17,7 +17,7 @@ const getSong = async (req, res) => {
       }
     }
     catch (error) {
-      res.status(500).json({ message: error });
+      return res.status(500).json({ message: error });
     }
     return res.status(404).json({error:"no encontrado"})
   }
@@ -33,7 +33,8 @@ const findSongs = async(req,res)=>{
 
       const albumsQuery = await knex("songs")
         .select("album_name")
-        .first()
+        .groupBy("album_name")
+        .limit(10)
 
       const artists = await knex("artists").select("*")
         .limit(10)
@@ -58,7 +59,8 @@ const findSongs = async(req,res)=>{
       const albumsQuery = await knex("songs")
         .select("album_name")
         .where("album_name", "like", query)
-        .first()
+        .groupBy("album_name")
+        .limit(10)
 
       const artists = await knex("artists").select("*")
         .where("artist_name", "like", query)
