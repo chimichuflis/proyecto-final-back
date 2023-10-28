@@ -1,14 +1,28 @@
 const knex = require("../config/knexfile");
 
-const getSongs = async (req, res) => {
+
+const getSong = async (req, res) => {
+  if(req.params.songId){
     try {
-        const songs = await knex("songs").select("*")
-        res.json(songs);
+      const song = await knex("songs")
+        .join("artists", "artists.artist_id", "=", "songs.artist_id")
+        .join("genres", "genres.genre_id", "=", "songs.genre_id")
+        .select("song_id", "song_name", "album_name", "song_duration", "artist_name", "genre_name")
+        .where("song_id", req.params.songId)
+        .first()
+      if(song){
+        return res.json(song);
+      }else{
+        return res.status(404).json({error:"no encontrado"})
+      }
     }
     catch (error) {
-        res.status(500).json({ message: error });
+      res.status(500).json({ message: error });
     }
+    return res.status(404).json({error:"no encontrado"})
+  }
 }
+
 const findSongs = async(req,res)=>{
   if(!req.body.value){
     try {
@@ -59,4 +73,4 @@ const findSongs = async(req,res)=>{
   }
 }
 
-module.exports = { getSongs, findSongs }
+module.exports = { getSong, findSongs }
