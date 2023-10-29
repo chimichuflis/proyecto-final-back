@@ -3,9 +3,10 @@
 const express = require("express");
 
 const user = require("./routes/userRoutes");
-const contextual = require("./routes/contextualRoutes")
-const songs = require("./routes/songsRoutes")
-const playlists = require("./routes/playlistRoutes")
+const contextual = require("./routes/contextualRoutes");
+const match = require("./routes/matchRoutes");
+const songs = require("./routes/songsRoutes");
+const playlists = require("./routes/playlistRoutes");
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
@@ -21,6 +22,7 @@ app.use(cors());
 
 app.use("/api", user);
 app.use("/api", contextual);
+app.use("/api", match);
 app.use("/api", songs);
 app.use("/api", playlists);
 

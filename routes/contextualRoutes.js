@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    getContextualSongs,
-    getContextualOptions
+  getContextualSongs,
+  getContextualOptions
 } = require("../controllers/contextual");
 
 router.get(
@@ -11,7 +11,7 @@ router.get(
   getContextualOptions        // returns { activities:[], moods:[], weather:[], genres:[] }
 );
 router.post(                  // req.body = { activity: int, mood: int, weather: int, genre: [int,...] }
-    "/contextual/songs",      // returns [ ]
-    getContextualSongs
+  "/contextual/songs",        // returns [ ]
+  getContextualSongs
 );
 module.exports = router;
