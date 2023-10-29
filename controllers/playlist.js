@@ -2,11 +2,25 @@ const knex = require("../config/knexfile");
 
 const getPlaylists = async (req, res) => {
   try {
+    /*
     const playlists = await knex("playlists")
       .select("playlist_id","playlist_name")
       .where("user_id", req.user.id)
 
     res.json(playlists);
+    */
+    const playlists = await knex("playlists_songs")
+      .join("playlists", "playlists.playlist_id", "=", "playlists_songs.playlist_id")
+      .join("songs", "songs.song_id", "=", "playlists_songs.song_id")
+      .select(
+        "playlists_songs.playlist_id",
+        "playlist_name",
+        "artist_id"
+      )
+      .where("user_id", req.user.id)
+      .distinctOn("playlists_songs.playlist_id")
+
+    return res.json(playlists)
   }
   catch (error) {
       res.status(500).json({ message: error });

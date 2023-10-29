@@ -33,7 +33,7 @@ const findSongs = async(req,res)=>{
 
       const albumsQuery = await knex("songs")
         .select("album_name", "artist_id")
-        .groupBy("album_name", "artist_id")
+        .distinctOn("album_name")
         .limit(10)
 
       const artists = await knex("artists").select("*")
@@ -59,7 +59,7 @@ const findSongs = async(req,res)=>{
       const albumsQuery = await knex("songs")
         .select("album_name","artist_id")
         .where("album_name", "like", query)
-        .groupBy("album_name", "artist_id")
+        .distinctOn("album_name")
         .limit(10)
 
       const artists = await knex("artists").select("*")
