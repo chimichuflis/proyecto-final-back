@@ -9,7 +9,7 @@ const validEmail = async (req, res) => {
       .where("email", req.body.email)
       .first()
 
-    return res.json({ validity: !user, msg: user ? "email ya existe" : "email disponible" });
+    return res.json({ validity: !user, msg: user ? "Email ya existe" : "Email disponible" });
   }
   catch (err) {
     res.status(400).json(err);
@@ -24,7 +24,7 @@ const userRegister = async (req, res) => {
       .first();
 
     if (user) {
-      return res.json({ pass: false, msg: "email already in use" });
+      return res.json({ pass: false, msg: "El email ya está en uso" });
     }
     const salt = await bcrypt.genSalt(10);
     const passwordEncrypt = await bcrypt.hash(req.body.password, salt);
@@ -53,14 +53,14 @@ const userLogin = async (req, res) => {
       .first()
 
     if (!user) {
-      return res.json({ pass: false, msg: "invalid user or password" });
+      return res.json({ pass: false, msg: "Usuario o contraseña inválidos" });
     }
 
     const validatePassword = await bcrypt.compare(
       req.body.password, user.password
     );
     if (!validatePassword) {
-      return res.json({ pass: false, msg: "invalid email or password" });
+      return res.json({ pass: false, msg: "Usuario o contraseña inválidos" });
     }
 
     const token = jsonwebtoken.sign(
