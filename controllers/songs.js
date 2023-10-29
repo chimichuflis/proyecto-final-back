@@ -32,8 +32,8 @@ const findSongs = async(req,res)=>{
         .limit(20)
 
       const albumsQuery = await knex("songs")
-        .select("album_name")
-        .groupBy("album_name")
+        .select("album_name", "artist_id")
+        .groupBy("album_name", "artist_id")
         .limit(10)
 
       const artists = await knex("artists").select("*")
@@ -57,9 +57,9 @@ const findSongs = async(req,res)=>{
         .limit(20)
 
       const albumsQuery = await knex("songs")
-        .select("album_name")
+        .select("album_name","artist_id")
         .where("album_name", "like", query)
-        .groupBy("album_name")
+        .groupBy("album_name", "artist_id")
         .limit(10)
 
       const artists = await knex("artists").select("*")

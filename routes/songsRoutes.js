@@ -14,9 +14,9 @@ router.get(
     getSong
 );
 
-router.post(            // req.body = { value: "" }
-  "/song/search",        // returns { }
-  findSongs             // { songs: [], artists: [], albums: [] }
+router.post(              // req.body = { value: "" }
+  "/song/search",         // returns { }
+  findSongs               // { songs: [], artists: [], albums: [] }
 );
 
 module.exports = router;
