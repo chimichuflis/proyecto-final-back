@@ -24,7 +24,7 @@ const userRegister = async (req, res) => {
       .first();
 
     if (user) {
-      return res.json({ pass: false, msg: "email already in use" });
+      return res.json({ pass: false, msg: "El email ya está en uso" });
     }
     const salt = await bcrypt.genSalt(10);
     const passwordEncrypt = await bcrypt.hash(req.body.password, salt);
