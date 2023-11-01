@@ -22,7 +22,7 @@ const getPlaylistSongs = async(req,res)=>{
         .join("songs", "songs.song_id", "=", "playlists_songs.song_id")
         .join("genres", "genres.genre_id", "=", "songs.genre_id")
         .join("artists", "songs.artist_id", "=", "artists.artist_id")
-        .select("songs.song_id","song_name", "album_name", "song_duration", "genre_name", "artist_name")
+        .select("songs.song_id","song_name", "album_name", "song_duration", "genre_name", "artist_name", "songs.artist_id", "playlists.playlist_name")
         .where("user_id",req.user.id)
         .andWhere("playlists_songs.playlist_id", req.params.id)
       return res.json(playlistSongs)
