@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {tokenValidator} = require("../middleweares/validators/tokenValidator");
 
 const {
   getContextualSongs,
@@ -12,6 +13,7 @@ router.get(
 );
 router.post(                  // req.body = { activity: int, mood: int, weather: int, genre: [int,...] }
   "/contextual/songs",        // returns [ ]
+  tokenValidator,
   getContextualSongs
 );
 module.exports = router;

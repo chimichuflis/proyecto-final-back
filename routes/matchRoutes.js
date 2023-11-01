@@ -4,6 +4,7 @@ const router = express.Router();
 const {tokenValidator} = require("../middleweares/validators/tokenValidator");
 const {
   getMatchArtists,
+  createMatchPlaylist
 } = require("../controllers/match");
 
 router.get(
@@ -11,5 +12,11 @@ router.get(
   tokenValidator,
   getMatchArtists        // returns []
 );
+
+router.post(
+  "match/newplaylist",
+  tokenValidator,
+  createMatchPlaylist
+)
 
 module.exports = router;

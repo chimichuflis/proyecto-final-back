@@ -2,25 +2,17 @@ const knex = require("../config/knexfile");
 
 const getPlaylists = async (req, res) => {
   try {
-    /*
     const playlists = await knex("playlists")
-      .select("playlist_id","playlist_name")
-      .where("user_id", req.user.id)
-
-    res.json(playlists);
-    */
-    const playlists = await knex("playlists_songs")
-      .join(
-        "playlists",
-        "playlists.playlist_id",
+      .leftJoin(
+        "playlists_songs",
+        "playlists_songs.playlist_id",
         "=",
-        "playlists_songs.playlist_id"
+        "playlists.playlist_id"
       )
-      .join("songs", "songs.song_id", "=", "playlists_songs.song_id")
-      .select("playlists_songs.playlist_id", "playlist_name", "artist_id")
+      .leftJoin("songs", "songs.song_id", "=", "playlists_songs.song_id")
+      .select("playlists.*", "songs.artist_id")
       .where("user_id", req.user.id)
-      .distinctOn("playlists_songs.playlist_id");
-
+      .distinctOn("playlists.playlist_id");
     return res.json(playlists);
   } catch (error) {
     res.status(500).json({ message: error });
@@ -46,7 +38,8 @@ const getPlaylistSongs = async (req, res) => {
         "song_duration",
         "genre_name",
         "artist_name",
-        "artists.artist_id"
+        "songs.artist_id",
+        "playlists.playlist_name"
       )
       .where("user_id", req.user.id)
       .andWhere("playlists_songs.playlist_id", req.params.id);
