@@ -3,6 +3,7 @@ const knex = require("../config/knexfile");
 const getContextualSongs = async (req, res) => {
   let block = "start"
   try{
+    console.log(req.body)
     const songArr = [];
 
     // getting songs:
@@ -45,8 +46,8 @@ const getContextualSongs = async (req, res) => {
         songArr.push(...genre1Songs);
 
         if(req.body.genre[2]){
-          select("song_id")
           const genre2Songs = await knex("songs")
+            .select("song_id")
             .where("genre_id", req.body.genre[2])
           songArr.push(...genre2Songs);
         }

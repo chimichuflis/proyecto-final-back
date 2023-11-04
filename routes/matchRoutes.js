@@ -14,7 +14,7 @@ router.get(
 );
 
 router.post(
-  "match/newplaylist",
+  "/match/playlist",
   tokenValidator,
   createMatchPlaylist
 )
