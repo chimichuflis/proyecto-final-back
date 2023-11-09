@@ -48,6 +48,35 @@ const getPlaylistSongs = async (req, res) => {
     return res.status(500).json(err);
   }
 };
+const getAllPlaylistSongs = async (req, res) => {
+  try {
+    const playlistSongs = await knex("playlists_songs")
+      .join(
+        "playlists",
+        "playlists.playlist_id",
+        "=",
+        "playlists_songs.playlist_id"
+      )
+      .join("songs", "songs.song_id", "=", "playlists_songs.song_id")
+      .join("genres", "genres.genre_id", "=", "songs.genre_id")
+      .join("artists", "songs.artist_id", "=", "artists.artist_id")
+      .select(
+        "songs.song_id",
+        "song_name",
+        "album_name",
+        "song_duration",
+        "genre_name",
+        "artist_name",
+        "songs.artist_id",
+        "playlists.playlist_name",
+        "playlists.playlist_id"
+      )
+      .where("user_id", req.user.id);
+    return res.json(playlistSongs);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
 
 const createPlaylist = async (req, res) => {
   try {
@@ -99,4 +128,5 @@ module.exports = {
   createPlaylist,
   renamePlaylist,
   playlistAddSong,
+  getAllPlaylistSongs,
 };
