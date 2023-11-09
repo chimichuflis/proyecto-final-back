@@ -13,14 +13,11 @@ const getMatchArtists = async (req,res)=>{
 }
 
 const createMatchPlaylist = async (req,res)=>{
+  console.log(req.body.artists);
+  const myArray = req.body.artists;
   try{
-    const songArr = [];
-    //req.body.artists.forEach(n=>{
-      //const arr = await knex("songs")
-      //  .where("artist_id", n)
-      //songArr.push(...arr);
-    //});
-    return res.json(songArr);
+      const arr = await knex.raw('select * from songs where artist_id in (' + myArray.map(_ => '?').join(',') + ')', [...myArray]);
+    return res.json(arr.rows);
   }
   catch(err){
     res.json({pass:false,err:err});
